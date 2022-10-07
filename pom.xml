@@ -58,6 +58,38 @@
     <build>
         <pluginManagement>
             <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+
+                    <configuration>
+                        <configLocation>/checkstyle/checkstyle.xml</configLocation>
+                        <suppressionsLocation>/checkstyle/checkstyle_suppress.xml</suppressionsLocation>
+                        <consoleOutput>true</consoleOutput>
+                        <failsOnError>true</failsOnError>
+                        <failOnViolation>true</failOnViolation>
+                        <outputFileFormat>xml</outputFileFormat>
+                        <includeTestSourceDirectory>false</includeTestSourceDirectory>
+
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <dependencies>
+                        <dependency> <groupId>liga.medical</groupId>
+
+                            <artifactId>build-tools</artifactId>
+                            <version>${project.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
@@ -92,6 +124,28 @@
         </pluginManagement>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <failOnViolation>true</failOnViolation>
+                    <includeTests>true</includeTests>
+                    <linkXRef>false</linkXRef>
+                    <printFailingErrors>true</printFailingErrors>
+                    <rulesets>
+                        <ruleset>config/pmd/pmd.xml</ruleset> <!-- Есть нюансы для многомодульных проектов -->
+                    </rulesets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>pmd-check</id>
+                        <phase>test</phase> <!-- Желательно наличие байт-кода; см. https://maven.apache.org/plugins/maven-pmd-plugin/faq.html -->
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
