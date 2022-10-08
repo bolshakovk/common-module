@@ -11,22 +11,9 @@
         <relativePath>../dependency-management-bom/pom.xml</relativePath>
     </parent>
     <artifactId>common-core</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>liga.medical</groupId>
             <artifactId>common-services</artifactId>
@@ -40,25 +27,5 @@
             <artifactId>common-dto</artifactId>
         </dependency>
     </dependencies>
-
-    <version>0.0.1-SNAPSHOT</version>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.version}</version>
-                <executions>
-                    <execution>
-                        <id>build-info</id>
-                        <goals>
-                            <goal>build-info</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-    <packaging>jar</packaging>
     
 </project>
