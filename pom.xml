@@ -3,7 +3,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-
     <groupId>liga.medical</groupId>
     <artifactId>common</artifactId>
     <packaging>pom</packaging>
@@ -23,7 +22,6 @@
     </modules>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -41,8 +39,9 @@
         <validation-api.version>2.0.1.Final</validation-api.version>
         <model.mapper.version>2.3.7</model.mapper.version>
         <guava.version>29.0-jre</guava.version>
-        <lombok.version>1.18.20</lombok.version>
+        <lombok.version>1.18.22</lombok.version>
         <springboot.test.version>2.1.2.RELEASE</springboot.test.version>
+        <spring.amqp.version>2.7.4</spring.amqp.version>
     </properties>
 
     <dependencyManagement>
@@ -58,13 +57,24 @@
     <build>
         <pluginManagement>
             <plugins>
-
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring.boot.version}</version>
                 </plugin>
-
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>${pmd.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkstyle.plugin.version}</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -74,65 +84,6 @@
                         <target>${maven.compiler.target}</target>
                         <encoding>UTF-8</encoding>
                     </configuration>
-                </plugin>
-
-
-                <!--MAVEN PMD PLUGIN !-->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-pmd-plugin</artifactId>
-                    <version>${pmd.plugin.version}</version>
-                    <configuration>
-                        <failOnViolation>true</failOnViolation>
-                        <includeTests>true</includeTests>
-                        <linkXRef>false</linkXRef>
-                        <printFailingErrors>true</printFailingErrors>
-                        <rulesets>
-                            <ruleset>config/pmd/pmd.xml</ruleset> <!-- Есть нюансы для многомодульных проектов -->
-                        </rulesets>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>pmd-check</id>
-                            <phase>test</phase> <!-- Желательно наличие байт-кода; см. https://maven.apache.org/plugins/maven-pmd-plugin/faq.html -->
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-
-                <!--MAVEN CHECKSTYLE PLUGIN !-->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-
-                    <configuration>
-                        <configLocation>/checkstyle/checkstyle.xml</configLocation>
-                        <suppressionsLocation>/checkstyle/checkstyle_suppress.xml</suppressionsLocation>
-                        <consoleOutput>true</consoleOutput>
-                        <failsOnError>true</failsOnError>
-                        <failOnViolation>true</failOnViolation>
-                        <outputFileFormat>xml</outputFileFormat>
-                        <includeTestSourceDirectory>false</includeTestSourceDirectory>
-                    </configuration>
-
-                    <executions>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-
-                    <dependencies>
-                        <dependency>
-                            <groupId>liga.medical</groupId>
-                            <artifactId>build-tools</artifactId>
-                            <version>${project.version}</version>
-                        </dependency>
-                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -174,9 +125,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <!--                <executions>-->
+                <!--                    <execution>-->
+                <!--                        <id>Test Jar</id>-->
+                <!--                        <goals>-->
+                <!--                            <goal>test-jar</goal>-->
+                <!--                        </goals>-->
+                <!--                    </execution>-->
+                <!--                </executions>-->
             </plugin>
         </plugins>
-
     </build>
 
     <profiles>
